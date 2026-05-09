@@ -161,3 +161,48 @@ Expected local outputs:
 If `pyspark` is not available in the current environment, the tests still
 validate schema, range rules, and pipeline wiring, while the execution commands
 above can be run locally on a machine with PySpark installed.
+
+## Analytical Gold Output Expectations
+
+The analytical consumption layer now reads persisted gold artifacts directly
+from `data/gold/` without recalculating bronze, silver, or gold.
+
+Current analytical contract for gold:
+- artifacts are expected under period-specific paths such as
+  `data/gold/2024-01_to_2024-01/`
+- the persisted gold dataset must expose:
+  - `service_date`
+  - `pickup_zone_id`
+  - `trip_count`
+  - `total_fare`
+  - `avg_fare`
+  - `total_distance`
+  - `avg_distance`
+  - `avg_duration_minutes`
+- critical analytical fields must be present and non-null for consumption
+- ride, fare, distance, and duration metrics must remain non-negative
+
+Available analytical helpers:
+- `src/common/read_gold_artifacts.py` reads persisted parquet artifacts from the
+  gold layer
+- `src/processing/validate_gold_contract.py` validates the gold consumption contract
+- `src/processing/analytics_views.py` extracts KPIs and lightweight analytical views
+
+Current KPI helpers expose:
+- total rides and total demand
+- total and average fare
+- total and average distance
+- average duration in minutes
+- service day count
+- pickup zone count
+
+Local validation commands for the analytical layer:
+
+```powershell
+& 'C:\Users\mht-1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest tests\data_quality\test_gold_contract.py tests\integration\test_gold_readers.py
+```
+
+Dependency note:
+- `tests/integration/test_gold_readers.py` validates against the persisted local
+  artifact in `data/gold/2024-01_to_2024-01/`
+- if that artifact does not exist locally, the integration test is expected to skip

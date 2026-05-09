@@ -144,15 +144,15 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 4
 
-- [ ] T053 [P] [US4] Add a gold contract validation test in `tests/data_quality/test_gold_contract.py`
-- [ ] T054 [P] [US4] Add an analytical reader integration test in `tests/integration/test_gold_readers.py`
+- [X] T053 [P] [US4] Add a gold contract validation test in `tests/data_quality/test_gold_contract.py`
+- [X] T054 [P] [US4] Add an analytical reader integration test in `tests/integration/test_gold_readers.py`
 
 ### Implementation for User Story 4
 
-- [ ] T055 [P] [US4] Create the gold dataset reader helpers in `src/common/read_gold_artifacts.py`
-- [ ] T056 [P] [US4] Create the KPI extraction helpers in `src/processing/analytics_views.py`
-- [ ] T057 [US4] Create the gold contract verification module in `src/processing/validate_gold_contract.py`
-- [ ] T058 [US4] Document analytical output expectations in `README.md`
+- [X] T055 [P] [US4] Create the gold dataset reader helpers in `src/common/read_gold_artifacts.py`
+- [X] T056 [P] [US4] Create the KPI extraction helpers in `src/processing/analytics_views.py`
+- [X] T057 [US4] Create the gold contract verification module in `src/processing/validate_gold_contract.py`
+- [X] T058 [US4] Document analytical output expectations in `README.md`
 
 **Checkpoint**: Gold artifacts satisfy the analytical contract before ML and dashboard layers depend on them.
 
