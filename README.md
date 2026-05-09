@@ -23,6 +23,8 @@ It does **not** yet implement:
 - Docker Desktop running locally
 - Docker Compose available in the shell
 - Python 3.12 for local test execution if you want to run the initial pytest suite
+- For local Python validation outside containers, install the development extra
+  with `pip install -e ".[dev]"` to get `pytest` and optional `pyspark`
 
 ## First Validation Command
 
@@ -116,3 +118,46 @@ python -c "from src.ingestion.bronze_pipeline import run_bronze_ingestion; run_b
 If the current environment cannot reach the public dataset or Docker/Airflow is
 not running, use the command above locally on a machine with network access and
 Docker Desktop available.
+
+## Silver and Gold Validation
+
+The silver implementation now reads persisted bronze parquet files, validates
+required Yellow Taxi columns, filters invalid records, derives time and zone
+features, and writes clean outputs into `data/silver/`.
+
+The gold implementation now reads persisted silver artifacts, aggregates daily
+metrics by pickup zone, and writes analytical outputs into `data/gold/`.
+
+Current silver behavior:
+- reads persisted bronze parquet inputs for a bounded period
+- rejects missing required Yellow Taxi columns
+- filters invalid rows with critical nulls or invalid fare, distance, total, or duration ranges
+- derives `service_date`, `pickup_hour`, `day_of_week`, `trip_duration_minutes`,
+  `pickup_zone_id`, and `dropoff_zone_id`
+
+Current gold behavior:
+- reads persisted silver outputs for the same bounded period
+- aggregates by `service_date` and `pickup_zone_id`
+- computes `trip_count`, `total_fare`, `avg_fare`, `total_distance`,
+  `avg_distance`, and `avg_duration_minutes`
+
+Local structural validation commands:
+
+```powershell
+& 'C:\Users\mht-1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest tests\data_quality\test_silver_schema.py tests\data_quality\test_gold_schema.py tests\data_quality\test_value_ranges.py tests\integration\test_processing_outputs.py
+```
+
+If `pyspark` is installed locally, a bounded local run can be validated with:
+
+```powershell
+python -c "from src.processing.bronze_to_silver import run_bronze_to_silver; run_bronze_to_silver('2024-01', '2024-01', spark_master='local[1]')"
+python -c "from src.processing.silver_to_gold import run_silver_to_gold; run_silver_to_gold('2024-01', '2024-01', spark_master='local[1]')"
+```
+
+Expected local outputs:
+- silver artifacts under `data/silver/2024-01_to_2024-01/`
+- gold artifacts under `data/gold/2024-01_to_2024-01/`
+
+If `pyspark` is not available in the current environment, the tests still
+validate schema, range rules, and pipeline wiring, while the execution commands
+above can be run locally on a machine with PySpark installed.

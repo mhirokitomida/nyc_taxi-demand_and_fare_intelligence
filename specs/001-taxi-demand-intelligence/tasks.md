@@ -113,24 +113,24 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 3
 
-- [ ] T038 [P] [US3] Add a silver schema validation test in `tests/data_quality/test_silver_schema.py`
-- [ ] T039 [P] [US3] Add a gold aggregate schema validation test in `tests/data_quality/test_gold_schema.py`
-- [ ] T040 [P] [US3] Add invalid fare, distance, and duration range tests in `tests/data_quality/test_value_ranges.py`
-- [ ] T041 [P] [US3] Add a silver-to-gold row count and non-empty output test in `tests/integration/test_processing_outputs.py`
+- [X] T038 [P] [US3] Add a silver schema validation test in `tests/data_quality/test_silver_schema.py`
+- [X] T039 [P] [US3] Add a gold aggregate schema validation test in `tests/data_quality/test_gold_schema.py`
+- [X] T040 [P] [US3] Add invalid fare, distance, and duration range tests in `tests/data_quality/test_value_ranges.py`
+- [X] T041 [P] [US3] Add a silver-to-gold row count and non-empty output test in `tests/integration/test_processing_outputs.py`
 
 ### Implementation for User Story 3
 
-- [ ] T042 [P] [US3] Create the bronze reader module in `src/processing/read_bronze.py`
-- [ ] T043 [P] [US3] Create the required-column validation module in `src/processing/validate_bronze_schema.py`
-- [ ] T044 [P] [US3] Create the invalid-record filtering module in `src/processing/filter_invalid_trips.py`
-- [ ] T045 [P] [US3] Create the derived trip feature builder in `src/processing/derive_trip_features.py`
-- [ ] T046 [US3] Create the bronze-to-silver pipeline entrypoint in `src/processing/bronze_to_silver.py`
-- [ ] T047 [US3] Create the silver artifact writer in `src/processing/write_silver.py`
-- [ ] T048 [P] [US3] Create the daily-by-zone aggregate builder in `src/processing/build_gold_daily_zone.py`
-- [ ] T049 [P] [US3] Create the gold artifact writer in `src/processing/write_gold.py`
-- [ ] T050 [US3] Create the silver-to-gold pipeline entrypoint in `src/processing/silver_to_gold.py`
-- [ ] T051 [US3] Add processing logs and layer validation hooks in `src/processing/silver_to_gold.py`
-- [ ] T052 [US3] Document silver and gold file verification checks in `README.md`
+- [X] T042 [P] [US3] Create the bronze reader module in `src/processing/read_bronze.py`
+- [X] T043 [P] [US3] Create the required-column validation module in `src/processing/validate_bronze_schema.py`
+- [X] T044 [P] [US3] Create the invalid-record filtering module in `src/processing/filter_invalid_trips.py`
+- [X] T045 [P] [US3] Create the derived trip feature builder in `src/processing/derive_trip_features.py`
+- [X] T046 [US3] Create the bronze-to-silver pipeline entrypoint in `src/processing/bronze_to_silver.py`
+- [X] T047 [US3] Create the silver artifact writer in `src/processing/write_silver.py`
+- [X] T048 [P] [US3] Create the daily-by-zone aggregate builder in `src/processing/build_gold_daily_zone.py`
+- [X] T049 [P] [US3] Create the gold artifact writer in `src/processing/write_gold.py`
+- [X] T050 [US3] Create the silver-to-gold pipeline entrypoint in `src/processing/silver_to_gold.py`
+- [X] T051 [US3] Add processing logs and layer validation hooks in `src/processing/silver_to_gold.py`
+- [X] T052 [US3] Document silver and gold file verification checks in `README.md`
 
 **Checkpoint**: Silver and gold outputs are reproducible and independently verifiable from a bronze input slice.
 
