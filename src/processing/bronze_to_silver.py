@@ -35,7 +35,7 @@ def run_bronze_to_silver(
             data_root=data_root,
         )
         validate_bronze_schema(bronze_df)
-        filtered_df = filter_invalid_trips(bronze_df)
+        filtered_df = filter_invalid_trips(bronze_df, start_month=start_month, end_month=end_month)
         silver_df = derive_trip_features(filtered_df)
         row_count = silver_df.count()
         if row_count == 0:

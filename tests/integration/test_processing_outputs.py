@@ -28,16 +28,24 @@ def test_bronze_to_silver_to_gold_outputs_are_created(tmp_path: Path, monkeypatc
 
     table = pa.table(
         {
-            "VendorID": [1, 2],
-            "tpep_pickup_datetime": [datetime(2024, 1, 1, 0, 0, 0), datetime(2024, 1, 1, 1, 0, 0)],
-            "tpep_dropoff_datetime": [datetime(2024, 1, 1, 0, 10, 0), datetime(2024, 1, 1, 1, 20, 0)],
-            "passenger_count": [1.0, 2.0],
-            "trip_distance": [1.5, 3.0],
-            "PULocationID": [100, 100],
-            "DOLocationID": [200, 201],
-            "payment_type": [1, 2],
-            "fare_amount": [10.0, 20.0],
-            "total_amount": [13.0, 24.0],
+            "VendorID": [1, 2, 3],
+            "tpep_pickup_datetime": [
+                datetime(2024, 1, 1, 0, 0, 0),
+                datetime(2024, 1, 1, 1, 0, 0),
+                datetime(2023, 12, 31, 23, 50, 0),
+            ],
+            "tpep_dropoff_datetime": [
+                datetime(2024, 1, 1, 0, 10, 0),
+                datetime(2024, 1, 1, 1, 20, 0),
+                datetime(2024, 1, 1, 0, 5, 0),
+            ],
+            "passenger_count": [1.0, 2.0, 1.0],
+            "trip_distance": [1.5, 3.0, 2.0],
+            "PULocationID": [100, 100, 101],
+            "DOLocationID": [200, 201, 202],
+            "payment_type": [1, 2, 1],
+            "fare_amount": [10.0, 20.0, 15.0],
+            "total_amount": [13.0, 24.0, 18.0],
         }
     )
     pq.write_table(table, parquet_path)
@@ -59,5 +67,7 @@ def test_bronze_to_silver_to_gold_outputs_are_created(tmp_path: Path, monkeypatc
 
     assert silver_result.row_count > 0
     assert gold_result.row_count > 0
+    assert silver_result.row_count == 2
+    assert gold_result.row_count == 1
     assert silver_result.output_path.exists()
     assert gold_result.output_path.exists()

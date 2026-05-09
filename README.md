@@ -254,3 +254,39 @@ Current MVP limitation:
   a portfolio demonstration but the evaluation window is still narrow
 - this is expected for the MVP and can be improved later by adding more months
   of gold artifacts before tuning the model
+
+## Streamlit Access and Validation
+
+The local dashboard now reads only persisted artifacts from `data/gold/` and
+`data/ml/`. It does not trigger Spark, Airflow, or the ML pipeline at runtime.
+
+Dashboard pages available in `app/streamlit/pages/`:
+- overview with KPI summary
+- demand trends
+- fares, distance, and duration
+- forecast vs observed
+
+Expected dashboard behavior:
+- historical pages work from `data/gold/2024-01_to_2024-01/`
+- forecast page uses `data/ml/2024-01_to_2024-01/` only when the required ML
+  artifacts exist
+- when ML artifacts are absent, stale, or incomplete, the dashboard shows a
+  clear message and keeps the historical views available
+
+Local Streamlit run command:
+
+```powershell
+python -m streamlit run app/streamlit/Home.py --server.address 127.0.0.1 --server.port 8501
+```
+
+Local dashboard validation commands:
+
+```powershell
+& 'C:\Users\mht-1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest tests\integration\test_dashboard_inputs.py tests\integration\test_streamlit_startup.py
+```
+
+If the UI cannot be opened in the current environment, validate locally that:
+- `http://127.0.0.1:8501/_stcore/health` responds
+- the dashboard loads the gold period `2024-01_to_2024-01`
+- the forecast page reads ML outputs only when `forecast_predictions.parquet`
+  and `evaluation_metrics.json` are present

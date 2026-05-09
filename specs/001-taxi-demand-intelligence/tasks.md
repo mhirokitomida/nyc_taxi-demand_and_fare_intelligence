@@ -192,18 +192,18 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 5
 
-- [ ] T069 [P] [US5] Add a dashboard input contract test for gold and ML artifacts in `tests/integration/test_dashboard_inputs.py`
-- [ ] T070 [P] [US5] Add a Streamlit startup smoke test in `tests/integration/test_streamlit_startup.py`
+- [X] T069 [P] [US5] Add a dashboard input contract test for gold and ML artifacts in `tests/integration/test_dashboard_inputs.py`
+- [X] T070 [P] [US5] Add a Streamlit startup smoke test in `tests/integration/test_streamlit_startup.py`
 
 ### Implementation for User Story 5
 
-- [ ] T071 [P] [US5] Create the dashboard data loading helpers in `app/streamlit/data_loader.py`
-- [ ] T072 [P] [US5] Create the KPI and summary page in `app/streamlit/pages/01_overview.py`
-- [ ] T073 [P] [US5] Create the demand trends page in `app/streamlit/pages/02_demand_trends.py`
-- [ ] T074 [P] [US5] Create the fares, distance, and duration page in `app/streamlit/pages/03_operations.py`
-- [ ] T075 [P] [US5] Create the predicted-vs-observed page in `app/streamlit/pages/04_forecast.py`
-- [ ] T076 [US5] Add missing or stale ML artifact handling in `app/streamlit/data_loader.py`
-- [ ] T077 [US5] Document the Streamlit access and smoke check flow in `README.md`
+- [X] T071 [P] [US5] Create the dashboard data loading helpers in `app/streamlit/data_loader.py`
+- [X] T072 [P] [US5] Create the KPI and summary page in `app/streamlit/pages/01_overview.py`
+- [X] T073 [P] [US5] Create the demand trends page in `app/streamlit/pages/02_demand_trends.py`
+- [X] T074 [P] [US5] Create the fares, distance, and duration page in `app/streamlit/pages/03_operations.py`
+- [X] T075 [P] [US5] Create the predicted-vs-observed page in `app/streamlit/pages/04_forecast.py`
+- [X] T076 [US5] Add missing or stale ML artifact handling in `app/streamlit/data_loader.py`
+- [X] T077 [US5] Document the Streamlit access and smoke check flow in `README.md`
 
 **Checkpoint**: The dashboard consumes persisted outputs only and remains blocked until gold and ML artifacts are available.
 
