@@ -166,19 +166,19 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 6
 
-- [ ] T059 [P] [US6] Add an ML feature dataset validation test in `tests/data_quality/test_ml_feature_dataset.py`
-- [ ] T060 [P] [US6] Add an ML artifact existence and metrics validation test in `tests/data_quality/test_ml_outputs.py`
-- [ ] T061 [P] [US6] Add a forecast pipeline integration test in `tests/integration/test_ml_pipeline.py`
+- [X] T059 [P] [US6] Add an ML feature dataset validation test in `tests/data_quality/test_ml_feature_dataset.py`
+- [X] T060 [P] [US6] Add an ML artifact existence and metrics validation test in `tests/data_quality/test_ml_outputs.py`
+- [X] T061 [P] [US6] Add a forecast pipeline integration test in `tests/integration/test_ml_pipeline.py`
 
 ### Implementation for User Story 6
 
-- [ ] T062 [P] [US6] Create the gold-to-ML dataset builder in `src/ml/build_training_slice.py`
-- [ ] T063 [P] [US6] Create the baseline demand model module in `src/ml/train_baseline_model.py`
-- [ ] T064 [P] [US6] Create the forecast generation module in `src/ml/generate_forecast.py`
-- [ ] T065 [P] [US6] Create the evaluation metrics module in `src/ml/evaluate_forecast.py`
-- [ ] T066 [US6] Create the ML pipeline entrypoint in `src/ml/run_ml_pipeline.py`
-- [ ] T067 [US6] Create the ML artifact writer in `src/ml/write_ml_outputs.py`
-- [ ] T068 [US6] Document MAE, RMSE, and MAPE validation checks in `README.md`
+- [X] T062 [P] [US6] Create the gold-to-ML dataset builder in `src/ml/build_training_slice.py`
+- [X] T063 [P] [US6] Create the baseline demand model module in `src/ml/train_baseline_model.py`
+- [X] T064 [P] [US6] Create the forecast generation module in `src/ml/generate_forecast.py`
+- [X] T065 [P] [US6] Create the evaluation metrics module in `src/ml/evaluate_forecast.py`
+- [X] T066 [US6] Create the ML pipeline entrypoint in `src/ml/run_ml_pipeline.py`
+- [X] T067 [US6] Create the ML artifact writer in `src/ml/write_ml_outputs.py`
+- [X] T068 [US6] Document MAE, RMSE, and MAPE validation checks in `README.md`
 
 **Checkpoint**: Demand forecasting works independently from persisted gold artifacts before the dashboard depends on ML outputs.
 

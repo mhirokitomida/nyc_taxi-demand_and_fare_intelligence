@@ -206,3 +206,51 @@ Dependency note:
 - `tests/integration/test_gold_readers.py` validates against the persisted local
   artifact in `data/gold/2024-01_to_2024-01/`
 - if that artifact does not exist locally, the integration test is expected to skip
+
+## ML Validation
+
+The ML layer now consumes the persisted gold artifacts from `data/gold/` and
+builds a simple, reproducible baseline for daily demand by pickup zone.
+
+Current ML behavior:
+- reads the gold dataset for a bounded period such as `2024-01_to_2024-01`
+- builds a training slice with:
+  - `service_date`
+  - `pickup_zone_id`
+  - `observed_demand`
+  - calendar features derived from the service date
+- uses an interpretable baseline model:
+  - `linear_regression_zone_day_baseline`
+- applies a simple temporal holdout split when multiple service dates exist
+- falls back to same-day evaluation only when the available gold window is too small
+
+Persisted ML outputs in `data/ml/<period>/`:
+- `training_slice.parquet`
+- `forecast_predictions.parquet`
+- `evaluation_metrics.json`
+- `run_metadata.json`
+
+ML validation expectations:
+- `MAE` and `RMSE` must always be present
+- `MAPE` is only populated when observed demand is strictly positive for the
+  evaluated rows
+- predictions must include both `predicted_demand` and `observed_demand` so the
+  MVP can compare forecast vs observed behavior later in the dashboard
+
+Local validation commands for the ML layer:
+
+```powershell
+& 'C:\Users\mht-1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest tests\data_quality\test_ml_feature_dataset.py tests\data_quality\test_ml_outputs.py tests\integration\test_ml_pipeline.py
+```
+
+Example local pipeline run against the real January gold artifact:
+
+```powershell
+python -c "from src.ml.run_ml_pipeline import run_ml_pipeline; run_ml_pipeline('2024-01', '2024-01')"
+```
+
+Current MVP limitation:
+- with only one persisted month in `data/gold/`, the baseline remains useful as
+  a portfolio demonstration but the evaluation window is still narrow
+- this is expected for the MVP and can be improved later by adding more months
+  of gold artifacts before tuning the model
