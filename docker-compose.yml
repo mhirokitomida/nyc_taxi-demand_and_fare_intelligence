@@ -24,6 +24,8 @@ services:
         condition: service_healthy
     env_file:
       - ./config/airflow.env
+    environment:
+      PYTHONPATH: /opt/airflow
     user: "50000:0"
     command: >
       bash -c "airflow db migrate &&
@@ -49,6 +51,8 @@ services:
         condition: service_completed_successfully
     env_file:
       - ./config/airflow.env
+    environment:
+      PYTHONPATH: /opt/airflow
     command: webserver
     ports:
       - "8080:8080"
@@ -76,6 +80,8 @@ services:
         condition: service_completed_successfully
     env_file:
       - ./config/airflow.env
+    environment:
+      PYTHONPATH: /opt/airflow
     command: scheduler
     volumes:
       - ./dags:/opt/airflow/dags

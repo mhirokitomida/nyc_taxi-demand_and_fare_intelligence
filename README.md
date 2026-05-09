@@ -14,7 +14,6 @@ This repository currently implements only:
 - Streamlit shell app
 
 It does **not** yet implement:
-- bronze ingestion
 - silver or gold processing
 - ML pipeline
 - analytical dashboard pages
@@ -78,4 +77,42 @@ $env:RUN_LOCAL_SERVICE_CHECKS="1"
 
 - `docker compose config` is the first required validation for this phase
 - `docker compose up -d` is the preferred runtime validation if Docker is available
-- No ingestion, processing, ML, or analytical dashboard validation is in scope yet
+
+## Bronze Ingestion Validation
+
+The bronze implementation now supports a bounded Yellow Taxi period, explicit
+batch metadata, and a bronze-only Airflow DAG in `dags/bronze_ingestion_dag.py`.
+
+Current bronze behavior:
+- the ingestion period must be between 1 and 12 months
+- the expected artifact URL is resolved from the public NYC TLC Yellow Taxi naming convention
+- raw files are persisted under `data/bronze/<YYYY-MM>/`
+- batch metadata is persisted under `data/bronze/_batch_metadata/`
+- rerun behavior is explicit:
+  - `rerun_mode="fail"` stops if metadata for the same period already exists
+  - `rerun_mode="replace"` allows replacing the same period after removing prior batch metadata
+- if an expected public artifact is unavailable, the ingestion fails explicitly
+
+Local structural validation commands:
+
+```powershell
+pytest tests/unit/test_ingestion_config.py tests/data_quality/test_bronze_artifacts.py
+```
+
+Local DAG validation path:
+- the bronze DAG should appear in Airflow with `dag_id="bronze_ingestion"`
+- trigger it with a very small recorte, for example one month only
+
+Recommended small local validation recorte:
+- `start_month=2024-01`
+- `end_month=2024-01`
+
+Example local validation call from Python:
+
+```powershell
+python -c "from src.ingestion.bronze_pipeline import run_bronze_ingestion; run_bronze_ingestion('2024-01', '2024-01', rerun_mode='fail')"
+```
+
+If the current environment cannot reach the public dataset or Docker/Airflow is
+not running, use the command above locally on a machine with network access and
+Docker Desktop available.

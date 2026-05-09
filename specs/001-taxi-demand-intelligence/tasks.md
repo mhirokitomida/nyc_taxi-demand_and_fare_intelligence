@@ -87,19 +87,19 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 2
 
-- [ ] T028 [P] [US2] Add a bounded-period ingestion config validation test in `tests/unit/test_ingestion_config.py`
-- [ ] T029 [P] [US2] Add a bronze artifact existence validation test in `tests/data_quality/test_bronze_artifacts.py`
+- [X] T028 [P] [US2] Add a bounded-period ingestion config validation test in `tests/unit/test_ingestion_config.py`
+- [X] T029 [P] [US2] Add a bronze artifact existence validation test in `tests/data_quality/test_bronze_artifacts.py`
 
 ### Implementation for User Story 2
 
-- [ ] T030 [P] [US2] Create the ingestion period configuration module in `src/ingestion/period_config.py`
-- [ ] T031 [P] [US2] Create the public Yellow Taxi source resolver in `src/ingestion/source_catalog.py`
-- [ ] T032 [P] [US2] Create the bronze download client in `src/ingestion/downloader.py`
-- [ ] T033 [US2] Create the batch metadata registration module in `src/ingestion/batch_registry.py`
-- [ ] T034 [US2] Create the bronze ingestion orchestrator in `src/ingestion/bronze_pipeline.py`
-- [ ] T035 [US2] Add bronze-specific logging and failure signaling in `src/ingestion/bronze_pipeline.py`
-- [ ] T036 [US2] Create the bronze-only DAG task file in `dags/bronze_ingestion_dag.py`
-- [ ] T037 [US2] Document bronze file existence checks under `data/bronze/` in `README.md`
+- [X] T030 [P] [US2] Create the ingestion period configuration module in `src/ingestion/period_config.py`
+- [X] T031 [P] [US2] Create the public Yellow Taxi source resolver in `src/ingestion/source_catalog.py`
+- [X] T032 [P] [US2] Create the bronze download client in `src/ingestion/downloader.py`
+- [X] T033 [US2] Create the batch metadata registration module in `src/ingestion/batch_registry.py`
+- [X] T034 [US2] Create the bronze ingestion orchestrator in `src/ingestion/bronze_pipeline.py`
+- [X] T035 [US2] Add bronze-specific logging and failure signaling in `src/ingestion/bronze_pipeline.py`
+- [X] T036 [US2] Create the bronze-only DAG task file in `dags/bronze_ingestion_dag.py`
+- [X] T037 [US2] Document bronze file existence checks under `data/bronze/` in `README.md`
 
 **Checkpoint**: A bounded raw data slice can be ingested and verified without silver, gold, or ML.
 
