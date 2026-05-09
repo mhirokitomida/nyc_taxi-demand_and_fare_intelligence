@@ -22,13 +22,13 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Establish the base repository structure and local validation entrypoints without implementing business logic yet.
 
-- [ ] T001 Create the base project directories in `config/`, `dags/`, `app/streamlit/`, `src/common/`, `src/ingestion/`, `src/processing/`, `src/ml/`, `tests/unit/`, `tests/integration/`, and `tests/data_quality/`
-- [ ] T002 Create placeholder tracking files for empty directories in `config/.gitkeep`, `dags/.gitkeep`, `app/streamlit/.gitkeep`, `src/common/.gitkeep`, `src/ingestion/.gitkeep`, `src/processing/.gitkeep`, `src/ml/.gitkeep`, `tests/unit/.gitkeep`, `tests/integration/.gitkeep`, and `tests/data_quality/.gitkeep`
-- [ ] T003 [P] Create the local data layer directories and placeholders in `data/bronze/.gitkeep`, `data/silver/.gitkeep`, `data/gold/.gitkeep`, and `data/ml/.gitkeep`
-- [ ] T004 Create the Python project baseline configuration in `pyproject.toml`
-- [ ] T005 [P] Create the minimal test runner configuration in `pytest.ini`
-- [ ] T006 [P] Create the local environment example configuration in `config/local.example.env`
-- [ ] T007 Document the first validation command and expected result in `README.md` for `docker compose config`
+- [X] T001 Create the base project directories in `config/`, `dags/`, `app/streamlit/`, `src/common/`, `src/ingestion/`, `src/processing/`, `src/ml/`, `tests/unit/`, `tests/integration/`, and `tests/data_quality/`
+- [X] T002 Create placeholder tracking files for empty directories in `config/.gitkeep`, `dags/.gitkeep`, `app/streamlit/.gitkeep`, `src/common/.gitkeep`, `src/ingestion/.gitkeep`, `src/processing/.gitkeep`, `src/ml/.gitkeep`, `tests/unit/.gitkeep`, `tests/integration/.gitkeep`, and `tests/data_quality/.gitkeep`
+- [X] T003 [P] Create the local data layer directories and placeholders in `data/bronze/.gitkeep`, `data/silver/.gitkeep`, `data/gold/.gitkeep`, and `data/ml/.gitkeep`
+- [X] T004 Create the Python project baseline configuration in `pyproject.toml`
+- [X] T005 [P] Create the minimal test runner configuration in `pytest.ini`
+- [X] T006 [P] Create the local environment example configuration in `config/local.example.env`
+- [X] T007 Document the first validation command and expected result in `README.md` for `docker compose config`
 
 **Checkpoint**: Base structure, Python metadata, and empty local data layers exist before service configuration begins.
 
@@ -38,16 +38,16 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Define the local platform contract that all user stories rely on.
 
-- [ ] T008 Create the initial Docker Compose topology in `docker-compose.yml` with service placeholders for Airflow, Postgres, Spark master, Spark worker, and Streamlit
-- [ ] T009 [P] Create the shared project settings module in `src/common/settings.py`
-- [ ] T010 [P] Create the shared path and artifact location helpers in `src/common/paths.py`
-- [ ] T011 [P] Create the shared logging utilities in `src/common/logging_utils.py`
-- [ ] T012 Create the shared data validation helpers in `src/common/data_checks.py`
-- [ ] T013 Create the Airflow environment configuration file in `config/airflow.env`
-- [ ] T014 [P] Create the Spark environment configuration file in `config/spark.env`
-- [ ] T015 [P] Create the Streamlit environment configuration file in `config/streamlit.env`
-- [ ] T016 Create the service-readiness smoke validation script in `tests/integration/test_service_readiness.py`
-- [ ] T017 Add the first Compose validation task for `docker compose config` coverage in `tests/integration/test_compose_config.md`
+- [X] T008 Create the initial Docker Compose topology in `docker-compose.yml` with service placeholders for Airflow, Postgres, Spark master, Spark worker, and Streamlit
+- [X] T009 [P] Create the shared project settings module in `src/common/settings.py`
+- [X] T010 [P] Create the shared path and artifact location helpers in `src/common/paths.py`
+- [X] T011 [P] Create the shared logging utilities in `src/common/logging_utils.py`
+- [X] T012 Create the shared data validation helpers in `src/common/data_checks.py`
+- [X] T013 Create the Airflow environment configuration file in `config/airflow.env`
+- [X] T014 [P] Create the Spark environment configuration file in `config/spark.env`
+- [X] T015 [P] Create the Streamlit environment configuration file in `config/streamlit.env`
+- [X] T016 Create the service-readiness smoke validation script in `tests/integration/test_service_readiness.py`
+- [X] T017 Add the first Compose validation task for `docker compose config` coverage in `tests/integration/test_compose_config.md`
 
 **Checkpoint**: Foundational service topology, shared config modules, and readiness validation scaffolding are in place.
 
@@ -61,19 +61,19 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 ### Tests for User Story 1
 
-- [ ] T018 [P] [US1] Add a Compose structure validation test in `tests/integration/test_docker_compose_structure.py`
-- [ ] T019 [P] [US1] Add an Airflow and Streamlit accessibility smoke test in `tests/integration/test_local_service_access.py`
+- [X] T018 [P] [US1] Add a Compose structure validation test in `tests/integration/test_docker_compose_structure.py`
+- [X] T019 [P] [US1] Add an Airflow and Streamlit accessibility smoke test in `tests/integration/test_local_service_access.py`
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Define the Airflow webserver, scheduler, and Postgres services in `docker-compose.yml`
-- [ ] T021 [US1] Define the Spark master and worker services in `docker-compose.yml`
-- [ ] T022 [US1] Define the Streamlit service shell in `docker-compose.yml`
-- [ ] T023 [P] [US1] Create the Airflow healthcheck and startup notes in `config/airflow.env`
-- [ ] T024 [P] [US1] Create the Spark local cluster startup notes in `config/spark.env`
-- [ ] T025 [P] [US1] Create the Streamlit startup notes in `config/streamlit.env`
-- [ ] T026 [US1] Create the first Streamlit shell entrypoint in `app/streamlit/Home.py`
-- [ ] T027 [US1] Document the `docker compose up` validation flow in `README.md`
+- [X] T020 [US1] Define the Airflow webserver, scheduler, and Postgres services in `docker-compose.yml`
+- [X] T021 [US1] Define the Spark master and worker services in `docker-compose.yml`
+- [X] T022 [US1] Define the Streamlit service shell in `docker-compose.yml`
+- [X] T023 [P] [US1] Create the Airflow healthcheck and startup notes in `config/airflow.env`
+- [X] T024 [P] [US1] Create the Spark local cluster startup notes in `config/spark.env`
+- [X] T025 [P] [US1] Create the Streamlit startup notes in `config/streamlit.env`
+- [X] T026 [US1] Create the first Streamlit shell entrypoint in `app/streamlit/Home.py`
+- [X] T027 [US1] Document the `docker compose up` validation flow in `README.md`
 
 **Checkpoint**: The local stack can be started and checked independently before any data pipeline logic is added.
 
