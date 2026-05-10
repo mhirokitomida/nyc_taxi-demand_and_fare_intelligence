@@ -260,13 +260,13 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Verify the full MVP contract before considering implementation complete.
 
-- [ ] T098 Run and record `docker compose config` and `docker compose up` validation results in `README.md`
-- [ ] T099 Verify local Airflow DAG visibility and service readiness using `tests/integration/test_local_service_access.py`
-- [ ] T100 Verify bounded bronze ingestion outputs under `data/bronze/` using `tests/data_quality/test_bronze_artifacts.py`
-- [ ] T101 Verify silver and gold outputs under `data/silver/` and `data/gold/` using `tests/data_quality/test_silver_schema.py` and `tests/data_quality/test_gold_schema.py`
-- [ ] T102 Verify ML outputs under `data/ml/` using `tests/data_quality/test_ml_outputs.py`
-- [ ] T103 Verify Streamlit accessibility and dashboard rendering using `tests/integration/test_streamlit_startup.py`
-- [ ] T104 Verify the MVP remains free of paid services, private credentials, and cloud-only dependencies by updating `README.md`
+- [X] T098 Run and record `docker compose config` and `docker compose up` validation results in `README.md`
+- [X] T099 Verify local Airflow DAG visibility and service readiness using `tests/integration/test_local_service_access.py`
+- [X] T100 Verify bounded bronze ingestion outputs under `data/bronze/` using `tests/data_quality/test_bronze_artifacts.py`
+- [X] T101 Verify silver and gold outputs under `data/silver/` and `data/gold/` using `tests/data_quality/test_silver_schema.py` and `tests/data_quality/test_gold_schema.py`
+- [X] T102 Verify ML outputs under `data/ml/` using `tests/data_quality/test_ml_outputs.py`
+- [X] T103 Verify Streamlit accessibility and dashboard rendering using `tests/integration/test_streamlit_startup.py`
+- [X] T104 Verify the MVP remains free of paid services, private credentials, and cloud-only dependencies by updating `README.md`
 
 **Checkpoint**: The MVP is locally demonstrable end-to-end and compliant with the project constitution.
 

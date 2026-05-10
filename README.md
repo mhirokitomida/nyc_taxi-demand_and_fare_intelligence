@@ -440,3 +440,32 @@ Somente os `.gitkeep` de cada camada permanecem rastreados.
 - incluir mais visualizacoes no dashboard
 - endurecer ainda mais a automacao operacional do Airflow em Windows/OneDrive
 - avaliar formatos/abstracoes lakehouse mais avancados no futuro, sem sair do modelo local e gratuito
+
+## Validacao final do MVP
+
+Ultima validacao consolidada deste MVP:
+
+- `pytest tests/unit tests/data_quality tests/integration/test_gold_readers.py tests/integration/test_ml_pipeline.py tests/integration/test_dashboard_inputs.py tests/integration/test_airflow_dag_definition.py`
+  - resultado: `50 passed`
+- `pytest tests/integration/test_local_service_access.py` com `RUN_LOCAL_SERVICE_CHECKS=1`
+  - resultado: `2 passed`
+- `pytest tests/integration/test_streamlit_startup.py`
+  - resultado: `1 passed`
+- `docker compose config`
+  - resultado: Compose valido
+- `docker compose exec airflow-webserver airflow dags list-import-errors`
+  - resultado: `No data found`
+- `docker compose exec airflow-webserver airflow dags list`
+  - resultado: `bronze_ingestion` e `nyc_taxi_mvp` visiveis
+
+Estado final confirmado:
+- Airflow, Spark, Streamlit, bronze, silver, gold, ML e dashboard estao coerentes com o README
+- a DAG `nyc_taxi_mvp` esta carregando sem import errors
+- o dashboard tem comando de validacao documentado e smoke test automatizado
+- `data/` continua ignorado pelo Git
+- o README nao promete cloud, deploy ou streaming real-time
+
+Limitacao residual conhecida:
+- o MVP esta funcional e demonstravel, mas ambientes Windows com OneDrive ainda
+  podem exigir atencao adicional para permissoes de bind mounts em algumas
+  operacoes de escrita dos containers
