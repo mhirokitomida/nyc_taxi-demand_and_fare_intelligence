@@ -19,6 +19,10 @@ def run_bronze_layer(**context: object) -> None:
         start_month=params.start_month,
         end_month=params.end_month,
         rerun_mode=params.rerun_mode,
+        download_max_attempts=params.download_max_attempts,
+        download_initial_wait_seconds=params.download_initial_wait_seconds,
+        download_backoff_multiplier=params.download_backoff_multiplier,
+        download_max_wait_seconds=params.download_max_wait_seconds,
     )
 
 

@@ -6,6 +6,10 @@ from typing import Any
 
 DEFAULT_START_MONTH = "2024-01"
 DEFAULT_RERUN_MODE = "fail"
+DEFAULT_DOWNLOAD_MAX_ATTEMPTS = 5
+DEFAULT_DOWNLOAD_INITIAL_WAIT_SECONDS = 5.0
+DEFAULT_DOWNLOAD_BACKOFF_MULTIPLIER = 2.0
+DEFAULT_DOWNLOAD_MAX_WAIT_SECONDS = 60.0
 ALL_TARGET_LAYERS = ("bronze", "silver", "gold", "ml")
 
 
@@ -16,6 +20,10 @@ class DagRunParameters:
     rerun_mode: str
     target_layers: tuple[str, ...]
     run_id: str | None
+    download_max_attempts: int
+    download_initial_wait_seconds: float
+    download_backoff_multiplier: float
+    download_max_wait_seconds: float
 
 
 def _normalize_target_layers(raw_value: Any) -> tuple[str, ...]:
@@ -48,6 +56,14 @@ def load_dag_run_parameters(context: dict[str, Any]) -> DagRunParameters:
         rerun_mode=rerun_mode,
         target_layers=target_layers,
         run_id=getattr(dag_run, "run_id", None) if dag_run else None,
+        download_max_attempts=int(conf.get("download_max_attempts", DEFAULT_DOWNLOAD_MAX_ATTEMPTS)),
+        download_initial_wait_seconds=float(
+            conf.get("download_initial_wait_seconds", DEFAULT_DOWNLOAD_INITIAL_WAIT_SECONDS)
+        ),
+        download_backoff_multiplier=float(
+            conf.get("download_backoff_multiplier", DEFAULT_DOWNLOAD_BACKOFF_MULTIPLIER)
+        ),
+        download_max_wait_seconds=float(conf.get("download_max_wait_seconds", DEFAULT_DOWNLOAD_MAX_WAIT_SECONDS)),
     )
 
 

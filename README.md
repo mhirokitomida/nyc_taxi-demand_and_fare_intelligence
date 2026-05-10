@@ -131,6 +131,10 @@ manter a execucao local mais rapida e demonstravel, mas a DAG `nyc_taxi_mvp`
 aceita periodos historicos longos quando houver tempo de execucao, disco e
 compatibilidade de schema para isso.
 
+Para reduzir falhas transitorias da fonte publica, a bronze aplica retries por
+arquivo com backoff exponencial e teto maximo. Se todas as tentativas falharem
+para um mes especifico, a ingestao ainda falha explicitamente ao final.
+
 ## Requisitos
 
 ### Para rodar o stack principal
@@ -202,6 +206,10 @@ Entradas:
 - `start_month`
 - `end_month`
 - `rerun_mode`
+- `download_max_attempts`
+- `download_initial_wait_seconds`
+- `download_backoff_multiplier`
+- `download_max_wait_seconds`
 
 Saidas:
 - `data/bronze/<YYYY-MM>/yellow_tripdata_<YYYY-MM>.parquet`
@@ -267,6 +275,21 @@ Payload recomendado para o MVP:
   "end_month": "2024-01",
   "rerun_mode": "replace",
   "target_layers": ["bronze", "silver", "gold", "ml"]
+}
+```
+
+Payload com retry customizado para historico ou janelas mais sensiveis a instabilidade:
+
+```json
+{
+  "start_month": "2024-01",
+  "end_month": "2024-01",
+  "rerun_mode": "replace",
+  "target_layers": ["bronze", "silver", "gold", "ml"],
+  "download_max_attempts": 5,
+  "download_initial_wait_seconds": 5,
+  "download_backoff_multiplier": 2,
+  "download_max_wait_seconds": 60
 }
 ```
 
@@ -442,6 +465,27 @@ Mitigacao aplicada:
 
 Observacao operacional:
 - dependendo do ambiente local, diretorios `runs/` e arquivos `_manifest.json` podem exigir atencao extra de permissao no host
+
+### HTTP 403, 429 ou falhas transitorias da CDN da NYC TLC
+
+Sintomas:
+- `HTTP 403`, `HTTP 429`, `HTTP 500`, `HTTP 502`, `HTTP 503` ou `HTTP 504`
+- timeout, `ConnectionError` ou `URLError` transitorio durante a bronze
+
+Estado atual:
+- o downloader tenta novamente por arquivo/mes com backoff exponencial
+- o download usa `User-Agent` explicito
+- arquivos sao baixados primeiro para `.tmp` e so viram `.parquet` apos conclusao completa
+
+Parametros de retry disponiveis na DAG:
+- `download_max_attempts`
+- `download_initial_wait_seconds`
+- `download_backoff_multiplier`
+- `download_max_wait_seconds`
+
+Comportamento:
+- falhas transitorias sao repetidas ate o limite configurado
+- se todas as tentativas falharem, a bronze falha explicitamente para o arquivo/mes
 
 ## Dados versionados no Git
 

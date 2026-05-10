@@ -6,7 +6,7 @@ from pathlib import Path
 from src.common.logging_utils import get_logger
 from src.common.paths import get_data_paths
 from src.ingestion.batch_registry import BatchMetadata, build_batch_metadata, metadata_path_for_period, write_batch_metadata
-from src.ingestion.downloader import DownloadResult, download_source_file
+from src.ingestion.downloader import DownloadResult, DownloadRetryConfig, download_source_file
 from src.ingestion.period_config import IngestionPeriod
 from src.ingestion.source_catalog import resolve_period_sources
 
@@ -42,16 +42,27 @@ def run_bronze_ingestion(
     start_month: str,
     end_month: str,
     rerun_mode: str = "fail",
+    download_max_attempts: int = 5,
+    download_initial_wait_seconds: float = 5.0,
+    download_backoff_multiplier: float = 2.0,
+    download_max_wait_seconds: float = 60.0,
 ) -> BronzePipelineResult:
     _assert_valid_rerun_mode(rerun_mode)
     period = IngestionPeriod(start_month=start_month, end_month=end_month)
     _prepare_for_rerun(period, rerun_mode)
+    retry_config = DownloadRetryConfig(
+        max_attempts=download_max_attempts,
+        initial_wait_seconds=download_initial_wait_seconds,
+        backoff_multiplier=download_backoff_multiplier,
+        max_wait_seconds=download_max_wait_seconds,
+    )
 
     logger.info(
-        "Starting bronze ingestion for %s to %s with rerun_mode=%s",
+        "Starting bronze ingestion for %s to %s with rerun_mode=%s and retry_config=%s",
         period.start_month,
         period.end_month,
         rerun_mode,
+        retry_config,
     )
 
     download_results: list[DownloadResult] = []
@@ -60,7 +71,11 @@ def run_bronze_ingestion(
 
     for source in sources:
         logger.info("Downloading yellow taxi artifact for %s", source.year_month)
-        result = download_source_file(source, replace_existing=replace_existing)
+        result = download_source_file(
+            source,
+            replace_existing=replace_existing,
+            retry_config=retry_config,
+        )
         download_results.append(result)
 
     metadata = build_batch_metadata(
