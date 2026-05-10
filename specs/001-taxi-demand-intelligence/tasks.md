@@ -246,11 +246,11 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Make the MVP runnable by a new evaluator from zero using only local documentation.
 
-- [ ] T093 Consolidate local prerequisites, startup commands, and service URLs in `README.md`
-- [ ] T094 Document the bounded Yellow Taxi ingestion workflow in `README.md`
-- [ ] T095 Document silver, gold, and ML validation expectations in `README.md`
-- [ ] T096 Document dashboard usage and failure modes in `README.md`
-- [ ] T097 Document rerun guidance and troubleshooting notes in `README.md`
+- [X] T093 Consolidate local prerequisites, startup commands, and service URLs in `README.md`
+- [X] T094 Document the bounded Yellow Taxi ingestion workflow in `README.md`
+- [X] T095 Document silver, gold, and ML validation expectations in `README.md`
+- [X] T096 Document dashboard usage and failure modes in `README.md`
+- [X] T097 Document rerun guidance and troubleshooting notes in `README.md`
 
 **Checkpoint**: The README is aligned with `quickstart.md` and can drive a clean local run without hidden assumptions.
 
