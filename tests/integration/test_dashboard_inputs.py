@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import pandas as pd
 
 from app.streamlit.data_loader import load_dashboard_artifacts, load_ml_artifacts, resolve_dashboard_period
@@ -19,7 +21,8 @@ def test_dashboard_loader_reads_real_gold_and_ml_artifacts() -> None:
 def test_dashboard_loader_reports_missing_ml_artifacts_when_absent(tmp_path) -> None:
     data_root = tmp_path / "data"
     gold_dir = data_root / "gold" / "2024-01_to_2024-01"
-    gold_dir.mkdir(parents=True, exist_ok=True)
+    run_dir = gold_dir / "runs" / "manual__dashboard"
+    run_dir.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(
         {
             "service_date": ["2024-01-01"],
@@ -31,7 +34,22 @@ def test_dashboard_loader_reports_missing_ml_artifacts_when_absent(tmp_path) -> 
             "avg_distance": [4.2],
             "avg_duration_minutes": [15.0],
         }
-    ).to_parquet(gold_dir / "part-00000.parquet", index=False)
+    ).to_parquet(run_dir / "part-00000.parquet", index=False)
+    (gold_dir / "_manifest.json").write_text(
+        json.dumps(
+            {
+                "layer": "gold",
+                "period_id": "2024-01_to_2024-01",
+                "latest_run_id": "manual__dashboard",
+                "latest_path": "gold/2024-01_to_2024-01/runs/manual__dashboard",
+                "created_at": "2026-05-09T00:00:00+00:00",
+                "status": "completed",
+                "row_count": 1,
+                "source_paths": [],
+            }
+        ),
+        encoding="utf-8",
+    )
 
     period = resolve_dashboard_period(requested_period="2024-01_to_2024-01", data_root=data_root)
     predictions, metrics, status = load_ml_artifacts(period=period, data_root=data_root)

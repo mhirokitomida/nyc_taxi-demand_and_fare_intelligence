@@ -290,3 +290,55 @@ If the UI cannot be opened in the current environment, validate locally that:
 - the dashboard loads the gold period `2024-01_to_2024-01`
 - the forecast page reads ML outputs only when `forecast_predictions.parquet`
   and `evaluation_metrics.json` are present
+
+## End-to-End Airflow DAG Trigger and Verification
+
+The project now includes an end-to-end Airflow DAG in
+`dags/nyc_taxi_mvp_dag.py` with the required execution order:
+
+- bronze -> silver -> gold -> ml
+
+Supported DAG runtime parameters:
+- `start_month`
+- `end_month`
+- `rerun_mode`
+- `target_layers`
+
+Expected task ids:
+- `run_bronze_ingestion`
+- `run_bronze_to_silver`
+- `run_silver_to_gold`
+- `run_ml_pipeline`
+
+Local validation command for the DAG definition:
+
+```powershell
+& 'C:\Users\mht-1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' -m pytest tests\integration\test_airflow_dag_definition.py
+```
+
+Local Airflow verification steps:
+- rebuild the custom Airflow image if Python dependencies changed:
+  - `docker compose build airflow-webserver airflow-scheduler airflow-init`
+- start the stack with `docker compose up -d`
+- open Airflow at `http://localhost:8080`
+- confirm the DAG `nyc_taxi_mvp` appears without import errors
+- confirm the graph view shows:
+  - `run_bronze_ingestion`
+  - `run_bronze_to_silver`
+  - `run_silver_to_gold`
+  - `run_ml_pipeline`
+
+Example trigger payload for `2024-01_to_2024-01`:
+
+```json
+{
+  "start_month": "2024-01",
+  "end_month": "2024-01",
+  "rerun_mode": "replace",
+  "target_layers": ["bronze", "silver", "gold", "ml"]
+}
+```
+
+If you want to validate only a subset against already persisted upstream
+artifacts, `target_layers` can be narrowed, but the DAG definition always keeps
+the ordering bronze -> silver -> gold -> ml.

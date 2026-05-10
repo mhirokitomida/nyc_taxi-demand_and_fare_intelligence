@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from src.common.lakehouse_manifests import resolve_latest_layer_path
 from src.common.logging_utils import get_logger
 from src.ml.build_training_slice import build_training_slice
 from src.ml.evaluate_forecast import evaluate_forecast
@@ -25,6 +26,8 @@ def run_ml_pipeline(
     end_month: str,
     data_root: Path | None = None,
     holdout_days: int | None = None,
+    rerun_mode: str = "fail",
+    run_id: str | None = None,
 ) -> MLRunResult:
     training_slice = build_training_slice(start_month=start_month, end_month=end_month, data_root=data_root)
     split_result = split_training_slice(training_slice=training_slice, holdout_days=holdout_days)
@@ -36,7 +39,7 @@ def run_ml_pipeline(
     )
 
     model = train_baseline_model(split_result.train_frame)
-    predictions = generate_forecast_frame(model=model, evaluation_frame=split_result.evaluation_frame)
+    predictions = generate_forecast_frame(model=model, evaluation_frame=split_result.evaluation_frame, run_id=run_id)
     metrics = evaluate_forecast(
         prediction_frame=predictions,
         split_strategy=split_result.split_strategy,
@@ -48,6 +51,18 @@ def run_ml_pipeline(
         metrics=metrics,
         start_month=start_month,
         end_month=end_month,
+        run_id=run_id,
+        rerun_mode=rerun_mode,
+        source_paths=[
+            str(
+                resolve_latest_layer_path(
+                    layer="gold",
+                    start_month=start_month,
+                    end_month=end_month,
+                    data_root=data_root,
+                )
+            )
+        ],
         data_root=data_root,
     )
     return MLRunResult(artifact_paths=artifact_paths, metrics=metrics)

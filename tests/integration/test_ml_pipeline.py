@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+from src.common.lakehouse_manifests import read_manifest
 from src.ml.run_ml_pipeline import run_ml_pipeline
 
 
@@ -14,9 +15,10 @@ REAL_GOLD_PATH = Path("data/gold/2024-01_to_2024-01")
 
 @pytest.mark.skipif(not REAL_GOLD_PATH.exists(), reason="Real gold artifacts are required for ML pipeline integration test")
 def test_ml_pipeline_runs_against_real_gold_and_writes_outputs() -> None:
-    result = run_ml_pipeline(start_month="2024-01", end_month="2024-01")
+    result = run_ml_pipeline(start_month="2024-01", end_month="2024-01", rerun_mode="replace", run_id="integration__ml")
 
     assert result.artifact_paths.output_dir.exists()
+    assert result.artifact_paths.manifest_path.exists()
     assert result.artifact_paths.training_slice_path.exists()
     assert result.artifact_paths.predictions_path.exists()
     assert result.artifact_paths.metrics_path.exists()
@@ -30,3 +32,6 @@ def test_ml_pipeline_runs_against_real_gold_and_writes_outputs() -> None:
     assert not predictions.empty
     assert {"predicted_demand", "observed_demand", "pickup_zone_id", "forecast_date"}.issubset(predictions.columns)
     assert persisted_metrics["mae"] == result.metrics["mae"]
+    manifest = read_manifest("ml", "2024-01", "2024-01")
+    assert manifest is not None
+    assert manifest.latest_path == "ml/2024-01_to_2024-01/runs/integration__ml"

@@ -4,6 +4,7 @@ import json
 
 import pandas as pd
 
+from src.common.lakehouse_manifests import read_manifest
 from src.ml.evaluate_forecast import evaluate_forecast
 from src.ml.write_ml_outputs import write_ml_outputs
 
@@ -75,6 +76,11 @@ def test_write_ml_outputs_persists_predictions_and_metrics(tmp_path) -> None:
     assert artifact_paths.training_slice_path.exists()
     assert artifact_paths.predictions_path.exists()
     assert artifact_paths.metrics_path.exists()
+    assert artifact_paths.manifest_path.exists()
     persisted_metrics = json.loads(artifact_paths.metrics_path.read_text(encoding="utf-8"))
+    persisted_manifest = read_manifest("ml", "2024-01", "2024-01", data_root=data_root)
     assert persisted_metrics["mae"] == 1.5
     assert persisted_metrics["rmse"] == 1.5
+    assert persisted_manifest is not None
+    assert persisted_manifest.latest_path == "ml/2024-01_to_2024-01/runs/run-1"
+    assert persisted_manifest.latest_run_id == "run-1"

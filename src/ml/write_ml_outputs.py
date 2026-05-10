@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.common.lakehouse_manifests import ensure_rerun_allowed, run_output_path, write_manifest
 from src.common.logging_utils import get_logger
 from src.common.paths import get_data_paths
 
@@ -17,6 +18,7 @@ logger = get_logger(__name__)
 @dataclass(frozen=True)
 class MLOutputPaths:
     output_dir: Path
+    manifest_path: Path
     training_slice_path: Path
     predictions_path: Path
     metrics_path: Path
@@ -34,9 +36,25 @@ def write_ml_outputs(
     metrics: dict[str, float | int | str | None],
     start_month: str,
     end_month: str,
+    run_id: str | None = None,
+    rerun_mode: str = "fail",
+    source_paths: list[str] | None = None,
     data_root: Path | None = None,
 ) -> MLOutputPaths:
-    output_dir = ml_output_dir(start_month=start_month, end_month=end_month, data_root=data_root)
+    ensure_rerun_allowed(
+        layer="ml",
+        start_month=start_month,
+        end_month=end_month,
+        rerun_mode=rerun_mode,
+        data_root=data_root,
+    )
+    output_dir = run_output_path(
+        layer="ml",
+        start_month=start_month,
+        end_month=end_month,
+        run_id=run_id or str(metrics["run_id"]),
+        data_root=data_root,
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     training_slice_path = output_dir / "training_slice.parquet"
@@ -54,7 +72,7 @@ def write_ml_outputs(
                 "generated_at": datetime.now(UTC).isoformat(),
                 "start_month": start_month,
                 "end_month": end_month,
-                "run_id": metrics["run_id"],
+                "run_id": run_id or metrics["run_id"],
                 "model_name": metrics["model_name"],
                 "training_rows": int(len(training_slice)),
                 "prediction_rows": int(len(predictions)),
@@ -63,9 +81,21 @@ def write_ml_outputs(
         ),
         encoding="utf-8",
     )
+    manifest_path = write_manifest(
+        layer="ml",
+        start_month=start_month,
+        end_month=end_month,
+        latest_run_id=run_id or str(metrics["run_id"]),
+        latest_path=output_dir,
+        status="completed",
+        row_count=int(len(predictions)),
+        source_paths=source_paths,
+        data_root=data_root,
+    )
 
     return MLOutputPaths(
         output_dir=output_dir,
+        manifest_path=manifest_path,
         training_slice_path=training_slice_path,
         predictions_path=predictions_path,
         metrics_path=metrics_path,

@@ -5,12 +5,12 @@ from pathlib import Path
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from src.common.lakehouse_manifests import resolve_latest_layer_path
 from src.common.paths import get_data_paths
-from src.processing.write_gold import gold_output_path
 
 
 def get_gold_dataset_path(start_month: str, end_month: str, data_root: Path | None = None) -> Path:
-    return gold_output_path(start_month=start_month, end_month=end_month, data_root=data_root)
+    return resolve_latest_layer_path(layer="gold", start_month=start_month, end_month=end_month, data_root=data_root)
 
 
 def list_gold_artifact_files(start_month: str, end_month: str, data_root: Path | None = None) -> list[Path]:

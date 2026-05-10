@@ -213,13 +213,13 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Connect the validated bronze, silver, gold, and ML steps into one bounded Airflow DAG.
 
-- [ ] T078 Create the shared DAG parameter schema for bounded periods and rerun mode in `dags/_dag_params.py`
-- [ ] T079 [P] Create the DAG task wrappers for bronze execution in `dags/tasks_bronze.py`
-- [ ] T080 [P] Create the DAG task wrappers for silver and gold execution in `dags/tasks_processing.py`
-- [ ] T081 [P] Create the DAG task wrappers for ML execution in `dags/tasks_ml.py`
-- [ ] T082 Create the end-to-end MVP DAG in `dags/nyc_taxi_mvp_dag.py`
-- [ ] T083 Create the DAG visibility and dependency validation test in `tests/integration/test_airflow_dag_definition.py`
-- [ ] T084 Document the DAG trigger and verification flow in `README.md`
+- [X] T078 Create the shared DAG parameter schema for bounded periods and rerun mode in `dags/_dag_params.py`
+- [X] T079 [P] Create the DAG task wrappers for bronze execution in `dags/tasks_bronze.py`
+- [X] T080 [P] Create the DAG task wrappers for silver and gold execution in `dags/tasks_processing.py`
+- [X] T081 [P] Create the DAG task wrappers for ML execution in `dags/tasks_ml.py`
+- [X] T082 Create the end-to-end MVP DAG in `dags/nyc_taxi_mvp_dag.py`
+- [X] T083 Create the DAG visibility and dependency validation test in `tests/integration/test_airflow_dag_definition.py`
+- [X] T084 Document the DAG trigger and verification flow in `README.md`
 
 **Checkpoint**: The full Airflow DAG is visible locally and reflects bronze -> silver -> gold -> ml ordering.
 

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.common.lakehouse_manifests import latest_manifest_path, read_manifest, resolve_latest_layer_path
 from src.common.paths import get_data_paths
 
 
@@ -60,10 +61,12 @@ def resolve_dashboard_period(requested_period: str | None = None, data_root: Pat
 
 
 def load_gold_frame(period: DashboardPeriod, data_root: Path | None = None) -> pd.DataFrame:
-    root = data_root or get_data_paths().root
-    dataset_path = root / "gold" / period.label
-    if not dataset_path.exists():
-        raise FileNotFoundError(f"Gold dataset path does not exist: {dataset_path}")
+    dataset_path = resolve_latest_layer_path(
+        layer="gold",
+        start_month=period.start_month,
+        end_month=period.end_month,
+        data_root=data_root,
+    )
     return pd.read_parquet(dataset_path)
 
 
@@ -83,8 +86,17 @@ def load_ml_artifacts(period: DashboardPeriod, data_root: Path | None = None) ->
             message=f"No ML artifacts were found for {period.label}. Run the ML pipeline to enable predictive views.",
         )
 
-    predictions_path = requested_ml_dir / "forecast_predictions.parquet"
-    metrics_path = requested_ml_dir / "evaluation_metrics.json"
+    manifest = read_manifest(layer="ml", start_month=period.start_month, end_month=period.end_month, data_root=root)
+    artifact_dir = (
+        latest_manifest_path(layer="ml", start_month=period.start_month, end_month=period.end_month, data_root=root)
+        if manifest is not None
+        else requested_ml_dir
+    )
+    if artifact_dir is None:
+        artifact_dir = requested_ml_dir
+
+    predictions_path = artifact_dir / "forecast_predictions.parquet"
+    metrics_path = artifact_dir / "evaluation_metrics.json"
     if not predictions_path.exists() or not metrics_path.exists():
         return None, None, MLArtifactStatus(
             state="incomplete",

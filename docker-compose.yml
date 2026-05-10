@@ -17,7 +17,10 @@ services:
       - airflow-postgres-data:/var/lib/postgresql/data
 
   airflow-init:
-    image: apache/airflow:2.10.1-python3.12
+    image: nyc-taxi-airflow:2.10.1-python3.12
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: nyc-taxi-airflow-init
     depends_on:
       airflow-postgres:
@@ -42,7 +45,10 @@ services:
       - ./data:/opt/airflow/data
 
   airflow-webserver:
-    image: apache/airflow:2.10.1-python3.12
+    image: nyc-taxi-airflow:2.10.1-python3.12
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: nyc-taxi-airflow-webserver
     depends_on:
       airflow-postgres:
@@ -71,7 +77,10 @@ services:
       - ./data:/opt/airflow/data
 
   airflow-scheduler:
-    image: apache/airflow:2.10.1-python3.12
+    image: nyc-taxi-airflow:2.10.1-python3.12
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: nyc-taxi-airflow-scheduler
     depends_on:
       airflow-postgres:
