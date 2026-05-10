@@ -160,8 +160,10 @@ services:
         condition: service_healthy
     env_file:
       - ./config/streamlit.env
+    environment:
+      PYTHONPATH: /app
     command: >
-      bash -c "pip install --no-cache-dir streamlit &&
+      bash -c "pip install --no-cache-dir streamlit pandas pyarrow &&
       streamlit run app/streamlit/Home.py
       --server.address=$${STREAMLIT_SERVER_ADDRESS}
       --server.port=$${STREAMLIT_SERVER_PORT}"
