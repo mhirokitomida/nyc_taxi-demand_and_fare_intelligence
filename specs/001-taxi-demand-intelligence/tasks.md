@@ -229,14 +229,14 @@ description: "Task list for implementing the NYC Taxi Demand and Fare Intelligen
 
 **Purpose**: Strengthen automated validation across shared modules and persisted layers.
 
-- [ ] T085 [P] Add shared settings and path helper unit tests in `tests/unit/test_common_settings.py`
-- [ ] T086 [P] Add ingestion module unit tests in `tests/unit/test_ingestion_modules.py`
-- [ ] T087 [P] Add processing module unit tests in `tests/unit/test_processing_modules.py`
-- [ ] T088 [P] Add ML module unit tests in `tests/unit/test_ml_modules.py`
-- [ ] T089 Add an end-to-end data layer existence validation test in `tests/data_quality/test_layer_artifact_presence.py`
-- [ ] T090 Add a critical nulls validation test across silver and gold outputs in `tests/data_quality/test_critical_nulls.py`
-- [ ] T091 Add a row count sanity validation test across bronze, silver, and gold in `tests/data_quality/test_row_count_sanity.py`
-- [ ] T092 Document the standard `pytest` validation command flow in `README.md`
+- [X] T085 [P] Add shared settings and path helper unit tests in `tests/unit/test_common_settings.py`
+- [X] T086 [P] Add ingestion module unit tests in `tests/unit/test_ingestion_modules.py`
+- [X] T087 [P] Add processing module unit tests in `tests/unit/test_processing_modules.py`
+- [X] T088 [P] Add ML module unit tests in `tests/unit/test_ml_modules.py`
+- [X] T089 Add an end-to-end data layer existence validation test in `tests/data_quality/test_layer_artifact_presence.py`
+- [X] T090 Add a critical nulls validation test across silver and gold outputs in `tests/data_quality/test_critical_nulls.py`
+- [X] T091 Add a row count sanity validation test across bronze, silver, and gold in `tests/data_quality/test_row_count_sanity.py`
+- [X] T092 Document the standard `pytest` validation command flow in `README.md`
 
 **Checkpoint**: Automated validations cover shared utilities, data quality constraints, and artifact presence before final MVP sign-off.
 

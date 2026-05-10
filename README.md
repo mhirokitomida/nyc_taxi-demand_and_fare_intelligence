@@ -342,3 +342,24 @@ Example trigger payload for `2024-01_to_2024-01`:
 If you want to validate only a subset against already persisted upstream
 artifacts, `target_layers` can be narrowed, but the DAG definition always keeps
 the ordering bronze -> silver -> gold -> ml.
+
+## Standard Validation Commands
+
+Use these commands as the default local validation flow for the current MVP:
+
+Run the unit and data quality suites:
+
+```powershell
+pytest tests/unit tests/data_quality
+```
+
+Run the main integration checks that depend on persisted analytical artifacts:
+
+```powershell
+pytest tests/integration/test_gold_readers.py tests/integration/test_ml_pipeline.py tests/integration/test_dashboard_inputs.py tests/integration/test_airflow_dag_definition.py
+```
+
+Notes:
+- `tests/integration/test_processing_outputs.py` keeps an explicit skip when local Java is unavailable for PySpark
+- data quality tests that depend on local artifacts in `data/` skip explicitly when the required manifest or artifact is not present
+- versioned silver, gold, and ml layers are validated through `_manifest.json` and the resolved `latest_path`, not through exact `part-*.parquet` filenames
