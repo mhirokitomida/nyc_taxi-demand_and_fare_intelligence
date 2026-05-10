@@ -34,8 +34,6 @@ class IngestionPeriod:
         month_span = (_month_index(end_year, end_num) - _month_index(start_year, start_num)) + 1
         if month_span < 1:
             raise ValueError("Ingestion period must include at least one month")
-        if month_span > 12:
-            raise ValueError("Ingestion period must not exceed 12 months for the MVP")
 
     @property
     def month_count(self) -> int:

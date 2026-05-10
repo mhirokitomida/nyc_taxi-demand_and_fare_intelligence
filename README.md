@@ -126,6 +126,11 @@ Fonte do MVP:
 O pipeline baixa os arquivos publicos esperados por mes. Se um arquivo esperado
 nao estiver disponivel, a ingestao falha explicitamente.
 
+O MVP foi validado operacionalmente com uma janela pequena de `2024-01` para
+manter a execucao local mais rapida e demonstravel, mas a DAG `nyc_taxi_mvp`
+aceita periodos historicos longos quando houver tempo de execucao, disco e
+compatibilidade de schema para isso.
+
 ## Requisitos
 
 ### Para rodar o stack principal
@@ -265,6 +270,23 @@ Payload recomendado para o MVP:
 }
 ```
 
+Payload de exemplo para historico longo:
+
+```json
+{
+  "start_month": "2009-01",
+  "end_month": "2026-02",
+  "rerun_mode": "replace",
+  "target_layers": ["bronze", "silver", "gold", "ml"]
+}
+```
+
+Observacoes para historico longo:
+- a DAG aceita periodos mensais continuos acima de 12 meses
+- o tempo de execucao cresce com o volume total baixado e processado
+- o uso de disco local cresce em `data/bronze`, `data/silver`, `data/gold` e `data/ml`
+- dados historicos mais antigos podem exigir atencao extra a variacoes de schema da NYC TLC
+
 Validacao manual sugerida:
 1. Abrir Airflow em `http://localhost:8080`
 2. Confirmar que `nyc_taxi_mvp` aparece sem import errors
@@ -341,6 +363,7 @@ Fora do escopo atual:
 ## Limitacoes do MVP
 
 - janela local de dados ainda pequena para um caso de uso mais robusto de ML
+- embora a DAG aceite historico longo, o MVP foi validado manualmente com um recorte pequeno
 - baseline de ML propositalmente simples e interpretavel
 - `MAPE` pode ficar muito sensivel quando a demanda observada e baixa
 - ambiente Windows + OneDrive pode introduzir peculiaridades de permissao em bind mounts

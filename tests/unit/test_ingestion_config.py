@@ -11,9 +11,14 @@ def test_period_config_rejects_invalid_month_order() -> None:
         IngestionPeriod(start_month="2024-03", end_month="2024-02")
 
 
-def test_period_config_rejects_more_than_twelve_months() -> None:
-    with pytest.raises(ValueError):
-        IngestionPeriod(start_month="2023-01", end_month="2024-02")
+def test_period_config_accepts_long_historical_range() -> None:
+    period = IngestionPeriod(start_month="2009-01", end_month="2026-02")
+
+    assert period.month_count == 206
+    months = period.iter_months()
+    assert months[0] == "2009-01"
+    assert months[-1] == "2026-02"
+    assert len(months) == 206
 
 
 def test_period_config_iterates_bounded_months() -> None:
